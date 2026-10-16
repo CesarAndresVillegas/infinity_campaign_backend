@@ -5,6 +5,7 @@ import * as factionsHandlers from "./handlers/factions/index.js";
 import * as matchesHandlers from "./handlers/matches/index.js";
 import * as forumHandlers from "./handlers/forum/index.js";
 import * as mapHandlers from "./handlers/map/index.js";
+import * as usersHandlers from "./handlers/users/index.js";
 import { getMe } from "./handlers/auth/me.js";
 
 type RouteHandler = (event: APIGatewayProxyEventV2) => Promise<APIGatewayProxyStructuredResultV2>;
@@ -56,6 +57,7 @@ const routes: Route[] = [
   route("GET", "/countries", mapHandlers.listCountries),
 
   route("GET", "/me", getMe),
+  route("GET", "/users/:userId", usersHandlers.getUser),
 ];
 
 export async function handler(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyStructuredResultV2> {
