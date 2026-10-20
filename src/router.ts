@@ -1,6 +1,6 @@
 import type { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from "aws-lambda";
 import { HttpError } from "./lib/errors.js";
-import { json } from "./lib/http.js";
+import { json, noContent } from "./lib/http.js";
 import * as factionsHandlers from "./handlers/factions/index.js";
 import * as matchesHandlers from "./handlers/matches/index.js";
 import * as forumHandlers from "./handlers/forum/index.js";
@@ -68,6 +68,10 @@ const routes: Route[] = [
 export async function handler(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyStructuredResultV2> {
   const method = event.requestContext.http.method;
   const path = event.requestContext.http.path;
+
+  if (method === "OPTIONS") {
+    return noContent();
+  }
 
   for (const r of routes) {
     if (r.method !== method) continue;
