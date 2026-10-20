@@ -6,6 +6,7 @@ import * as matchesHandlers from "./handlers/matches/index.js";
 import * as forumHandlers from "./handlers/forum/index.js";
 import * as mapHandlers from "./handlers/map/index.js";
 import * as usersHandlers from "./handlers/users/index.js";
+import * as uploadsHandlers from "./handlers/uploads/index.js";
 import { getMe } from "./handlers/auth/me.js";
 
 type RouteHandler = (event: APIGatewayProxyEventV2) => Promise<APIGatewayProxyStructuredResultV2>;
@@ -55,6 +56,8 @@ const routes: Route[] = [
   route("POST", "/threads/:threadId/posts", forumHandlers.createPost),
 
   route("GET", "/countries", mapHandlers.listCountries),
+
+  route("POST", "/uploads/presigned-url", uploadsHandlers.presignUpload),
 
   route("GET", "/me", getMe),
   route("GET", "/users/:userId", usersHandlers.getUser),
