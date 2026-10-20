@@ -80,6 +80,14 @@ export async function listUserMatches(event: APIGatewayProxyEventV2) {
   return json(200, rows);
 }
 
+export async function deleteMatch(event: APIGatewayProxyEventV2) {
+  const auth = await requireAuth(event);
+  const id = event.pathParameters?.matchId;
+  if (!id) throw new HttpError(400, "Missing matchId");
+  await matches.deleteMatch(id, auth.userId);
+  return noContent();
+}
+
 export async function likeMatch(event: APIGatewayProxyEventV2) {
   const auth = await requireAuth(event);
   const id = event.pathParameters?.matchId;

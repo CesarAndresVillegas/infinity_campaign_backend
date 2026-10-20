@@ -59,6 +59,20 @@ export async function listPosts(threadId: string): Promise<ForumPost[]> {
   `) as ForumPost[];
 }
 
+export async function getPostOwner(postId: string): Promise<string | null> {
+  const sql = getDb();
+  const rows = await sql`select author_user_id from forum_posts where id = ${postId}`;
+  return (rows[0] as { author_user_id: string } | undefined)?.author_user_id ?? null;
+}
+
+export async function deletePost(postId: string, userId: string): Promise<void> {
+  const ownerId = await getPostOwner(postId);
+  if (!ownerId) throw new HttpError(404, "Post not found");
+  if (ownerId !== userId) throw new HttpError(403, "You can only delete your own posts");
+  const sql = getDb();
+  await sql`delete from forum_posts where id = ${postId}`;
+}
+
 export async function createPost(
   threadId: string,
   factionId: string,

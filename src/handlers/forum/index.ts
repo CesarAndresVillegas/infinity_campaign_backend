@@ -1,5 +1,5 @@
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
-import { json, parseBody } from "../../lib/http.js";
+import { json, noContent, parseBody } from "../../lib/http.js";
 import { requireAuth } from "../../lib/auth.js";
 import { HttpError } from "../../lib/errors.js";
 import * as forum from "../../models/forum.js";
@@ -43,6 +43,14 @@ export async function listPosts(event: APIGatewayProxyEventV2) {
   }
   const rows = await forum.listPosts(threadId);
   return json(200, rows);
+}
+
+export async function deletePost(event: APIGatewayProxyEventV2) {
+  const auth = await requireAuth(event);
+  const postId = event.pathParameters?.postId;
+  if (!postId) throw new HttpError(400, "Missing postId");
+  await forum.deletePost(postId, auth.userId);
+  return noContent();
 }
 
 interface CreatePostBody {

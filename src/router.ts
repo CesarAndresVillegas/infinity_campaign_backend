@@ -45,6 +45,7 @@ const routes: Route[] = [
   route("POST", "/matches", matchesHandlers.createMatch),
   route("GET", "/matches", matchesHandlers.listMatches),
   route("GET", "/matches/:matchId", matchesHandlers.getMatch),
+  route("DELETE", "/matches/:matchId", matchesHandlers.deleteMatch),
   route("POST", "/matches/:matchId/like", matchesHandlers.likeMatch),
   route("DELETE", "/matches/:matchId/like", matchesHandlers.unlikeMatch),
   route("POST", "/matches/:matchId/views", matchesHandlers.addView),
@@ -54,6 +55,7 @@ const routes: Route[] = [
   route("POST", "/factions/:factionId/threads", forumHandlers.createThread),
   route("GET", "/threads/:threadId/posts", forumHandlers.listPosts),
   route("POST", "/threads/:threadId/posts", forumHandlers.createPost),
+  route("DELETE", "/threads/:threadId/posts/:postId", forumHandlers.deletePost),
 
   route("GET", "/countries", mapHandlers.listCountries),
 

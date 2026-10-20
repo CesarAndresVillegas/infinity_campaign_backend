@@ -105,6 +105,14 @@ export async function getMatchOwner(id: string): Promise<string | null> {
   return (rows[0] as { user_id: string } | undefined)?.user_id ?? null;
 }
 
+export async function deleteMatch(matchId: string, userId: string): Promise<void> {
+  const ownerId = await getMatchOwner(matchId);
+  if (!ownerId) throw new HttpError(404, "Match not found");
+  if (ownerId !== userId) throw new HttpError(403, "You can only delete your own matches");
+  const sql = getDb();
+  await sql`delete from matches where id = ${matchId}`;
+}
+
 export async function likeMatch(matchId: string, userId: string): Promise<void> {
   const sql = getDb();
   const ownerId = await getMatchOwner(matchId);
